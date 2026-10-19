@@ -1,0 +1,39 @@
+instruction,actual_intent,predicted_intent
+I want help cancellkng purchase {{Order Number}},cancel_order,change_order
+I want help cancellkng purchase {{Order Number}},cancel_order,change_order
+I want help cancellkng purchase {{Order Number}},cancel_order,change_order
+problems with cnceling purchase {{Order Number}},cancel_order,change_order
+order cancelation,cancel_order,change_order
+problems with cnceling purchase {{Order Number}},cancel_order,change_order
+"I ordered some items, need help cancelling the last purchase",cancel_order,place_order
+I want help cancellkng purchase {{Order Number}},cancel_order,change_order
+update purchase00123842,change_order,edit_account
+modify order00004587345,change_order,edit_account
+i have a problem with an adress update,change_shipping_address,contact_human_agent
+i have lost bill #00108 can ya show it to me,check_invoice,get_invoice
+i want assistance checking what paytment methods ya accept,check_payment_methods,delivery_options
+are the charges of ur services reimbursable,check_refund_policy,check_cancellation_fee
+are service charges reimbursable?,check_refund_policy,check_cancellation_fee
+are the charges of your services refundable?,check_refund_policy,check_cancellation_fee
+I don't know what to do to speak with cusstomer service,contact_customer_service,contact_human_agent
+i dont know what to do to talk with customre assistance,contact_customer_service,contact_human_agent
+can ya help me contactsomebody,contact_human_agent,get_refund
+i want information about creatign a {{Account Category}} account,create_account,delete_account
+I want a pro account,create_account,delete_account
+openng {{Account Category}} account,create_account,delete_account
+i want a freemium account,create_account,delete_account
+openng {{Account Category}} account,create_account,delete_account
+problem with creatingmy {{Account Type}} account,create_account,delete_account
+i cannot find bill #85632 can usendit to me,get_invoice,check_invoice
+i dont know how to gt the invoices from {{Person Name}},get_invoice,check_invoice
+i need help gettng bill #00108,get_invoice,check_invoice
+i have a question about thepayments,payment_issue,recover_password
+where do i report an issue with paynents,payment_issue,registration_problems
+I have a queston about the payment,payment_issue,check_payment_methods
+want assistance to make a purchse,place_order,complaint
+help to inform of issues with signu,registration_problems,payment_issue
+i do not know how i could switch tto the standard account,switch_account,delete_account
+lcate order {{Order Number}},track_order,change_order
+I need assistance trackng purchase {{Order Number}},track_order,cancel_order
+I want help olcating purchase {{Order Number}},track_order,change_order
+tracking refund,track_refund,get_refund
