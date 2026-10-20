@@ -1,0 +1,17 @@
+query,true_intent,first_relevant_rank,relevant_examples_in_train,hit_rate_at_1,recall_at_1,mrr_at_1,hit_rate_at_3,recall_at_3,mrr_at_3,hit_rate_at_5,recall_at_5,mrr_at_5,hit_rate_at_10,recall_at_10,mrr_at_10
+order cancelation,cancel_order,,673,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+help me editingorder {{Order Number}},change_order,,707,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+I need help checking the biol #37777,check_invoice,,691,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+are the charges of your services refundable?,check_refund_policy,,696,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+can ya help me contactsomebody,contact_human_agent,,703,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+what do I need to do to cancell a {{Account Category}} account?,delete_account,6.0,678,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,1,0.0029498525073746,0.1666666666666666
+can you give me information about delivery periods?,delivery_period,,692,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+what do I have to do to change my user data?,edit_account,,679,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+i dont knwo what to do to get damn refunds,get_refund,6.0,724,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,1,0.0027624309392265,0.1666666666666666
+where could i cancel mycorporate newsletter subscription,newsletter_subscription,6.0,712,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,1,0.0042134831460674,0.1666666666666666
+i have a question about thepayments,payment_issue,,708,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+want assistance to make a purchse,place_order,,702,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+what do I have to do to order somethingh?,place_order,,702,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+would it be possible to leave a comment for a service?,review,,718,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+would it be possible to sitch to the bloody {{Account Type}} account,switch_account,,697,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
+I want help olcating purchase {{Order Number}},track_order,,684,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0
