@@ -1,0 +1,31 @@
+case_name,customer_message,available_facts,latency_seconds,response,error,instruction_following_score,factual_restraint_score,helpfulness_score,review_notes
+Refund status,Has my refund been processed?,No account or order records are available.,22.47,"Hello,
+
+Thank you for your inquiry. Since there are no account or order records available, I am unable to provide specific details about your refund processing. However, I can guide you on how to check the status of your refund. You can typically find this information within your account settings or by contacting our customer support team directly. If you need further assistance, please let me know, and I will help you through the process.
+
+Best regards,  
+[Your Name]",,,,,
+Order tracking,Where is my order?,No tracking information or order status is available.,5.34,"I'm sorry, but I don't have any tracking information or order status available. Could you please provide more details about your order, such as the order number or the product you purchased? This will help me assist you better. If you have any additional information, please share it with me.",,,,,
+Order cancellation,I want to cancel my order.,The order number and shipment status are unknown.,7.61,"Hello,
+
+Thank you for reaching out. To cancel your order, please provide your order number and shipment status. Once we have this information, we can assist you with the cancellation process.
+
+If you're unsure of your order number, you can check your order history or contact our customer service team for assistance.
+
+If you have the shipment status, please let us know so we can proceed with the cancellation.
+
+Thank you for your understanding.
+
+Best regards,  
+[Your Name]",,,,,
+Known order facts,What is the status of my order?,Order status: shipped. Tracking number: TRK12345.,3.6,"Hello! Thank you for reaching out. Your order is currently shipped, and you can track its progress using the tracking number TRK12345. If you need any further assistance, feel free to ask.",,,,,
+Unsupported refund claim,Please confirm that my refund is approved.,No refund decision or account records are available.,8.85,"Hello,
+
+Thank you for reaching out. To confirm your refund approval, we need to check the system for any pending actions or approvals. Could you please provide your account number or email address? Once we have this information, we can proceed with verifying your refund status.
+
+If you do not have access to your account details, you can contact our support team directly for assistance. They can guide you through the necessary steps to verify your refund status.
+
+Thank you for your patience and understanding.
+
+Best regards,  
+[Your Name]",,,,,
