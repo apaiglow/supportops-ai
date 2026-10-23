@@ -1,0 +1,7 @@
+scenario_id,mode,relevance_1_to_5,clarity_1_to_5,actionability_1_to_5,grounding_1_to_5,unsupported_claims,notes
+refund_missing_info,baseline,,,,,,
+refund_missing_info,rag,,,,,,
+order_verified_facts,baseline,,,,,,
+order_verified_facts,rag,,,,,,
+cancellation_policy_unknown,baseline,,,,,,
+cancellation_policy_unknown,rag,,,,,,

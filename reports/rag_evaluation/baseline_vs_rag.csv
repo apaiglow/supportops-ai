@@ -1,0 +1,20 @@
+scenario_id,mode,model,temperature,top_k,customer_message,verified_facts,latency_seconds,draft,error
+refund_missing_info,baseline,qwen2.5:1.5b,0.2,0,Where is my refund? I have been waiting for it.,No account or order records are available.,24.251,Hi there! I'm sorry to hear that you're still waiting for your refund. Could you please provide your order number or the name of the product you purchased? This will help me locate your refund status more accurately.,
+refund_missing_info,rag,qwen2.5:1.5b,0.2,3,Where is my refund? I have been waiting for it.,No account or order records are available.,10.146,I'm sorry to hear that you're still waiting for your refund. Could you please provide me with your order number or the date of your purchase? This information will help me locate your refund request and ensure it's processed as soon as possible. Thank you for your patience.,
+order_verified_facts,baseline,qwen2.5:1.5b,0.2,0,Has my order shipped? Can you give me the tracking number?,Order status: shipped. Tracking number: TRK12345.,3.457,"Hi there! Yes, your order has shipped, and the tracking number is TRK12345. You can check it on the shipping confirmation email or the tracking website provided by the carrier.",
+order_verified_facts,rag,qwen2.5:1.5b,0.2,3,Has my order shipped? Can you give me the tracking number?,Order status: shipped. Tracking number: TRK12345.,7.633,"Hi there! I see you're looking for information about your order. To help you better, could you please provide me with your name and email address associated with the purchase? This will allow me to assist you more effectively. Once I have your details, I can guide you on how to track your order. Thank you for your patience and understanding.",
+cancellation_policy_unknown,baseline,qwen2.5:1.5b,0.2,0,I want to cancel my order. Can you confirm whether I will receive a full refund?,No account or order records are available. No cancellation or refund policy has been provided.,7.569,"Dear [Customer],
+
+Thank you for reaching out to us. We understand your concern about canceling your order and receiving a full refund. However, based on the verified facts provided, we can confirm that we do not have any information regarding your account, order, or refund policies. 
+
+To ensure a smooth process, we recommend reaching out to our customer support team directly for personalized assistance. They can provide you with the necessary guidance and confirm the refund details.
+
+Thank you for your understanding.
+
+Best regards,  
+[Your Name]  
+Customer Support Team",
+cancellation_policy_unknown,rag,qwen2.5:1.5b,0.2,3,I want to cancel my order. Can you confirm whether I will receive a full refund?,No account or order records are available. No cancellation or refund policy has been provided.,8.819,"Dear [Customer],
+Thank you for reaching out to us. I understand that you would like to cancel your order. To ensure a smooth process, please provide the order number or any relevant details about the order you wish to cancel. Once I have this information, I will guide you through the cancellation process and confirm whether you will receive a full refund.
+Best regards,  
+[Your Name]",
