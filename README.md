@@ -104,3 +104,19 @@ The `customer_message` field is required. `available_facts` can provide verified
 ### Error handling
 
 The API uses HTTP status codes to distinguish invalid requests, unavailable services, generation timeouts, and pipeline errors. See `/docs` for the request and response schemas.
+
+### RAG Evaluation
+
+SupportOps AI includes a repeatable smoke-evaluation script for inspecting generated support drafts.
+
+Run the evaluation from the project root:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/evaluate_rag.py
+```
+
+The script loads the processed training data, initializes the semantic retriever, runs the configured local language model on the fixed cases in `data/evaluation/support_cases.json`, and writes the results to `reports/rag_evaluation.csv`.
+
+The report records generated drafts, retrieved examples, latency, and fields for manual quality review.
+
+The evaluation set is small and is intended for qualitative smoke testing, not as a statistically representative benchmark. Retrieval metrics alone do not establish that generated responses are factually correct.

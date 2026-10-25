@@ -99,8 +99,19 @@ class GenerateResponse(BaseModel):
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    """Report whether the API process is responding."""
-    return {"status": "ok"}
+    """Report whether the API is ready to handle generation requests."""
+    retriever = getattr(app.state, "retriever", None)
+
+    if retriever is None:
+        raise HTTPException(
+            status_code=503,
+            detail="The retrieval system is not ready.",
+        )
+
+    return {
+        "status": "ok",
+        "retriever": "ready",
+    }
 
 
 @app.post("/generate", response_model=GenerateResponse)
@@ -142,7 +153,12 @@ def generate(request: GenerateRequest) -> dict[str, Any]:
             status_code=503,
             detail="The response-generation service is unavailable.",
         ) from exc
-
+    except Exception:
+        logger.exception("Unexpected error during response generation.")
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred while generating the response.",
+        ) from None
     return {
         "draft": result["draft"],
         "retrieved_examples": result["retrieved_examples"],

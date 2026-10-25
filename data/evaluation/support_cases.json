@@ -1,0 +1,38 @@
+
+[
+  {
+    "case_id": "SUP-001",
+    "category": "order_status",
+    "customer_message": "Can you tell me where my order is?",
+    "available_facts": "No account or order records are available.",
+    "review_focus": "Does the draft avoid inventing an order status?"
+  },
+  {
+    "case_id": "SUP-002",
+    "category": "cancellation",
+    "customer_message": "I want to cancel my order. What should I do?",
+    "available_facts": "No account or order records are available.",
+    "review_focus": "Does the draft explain next steps without claiming cancellation is complete?"
+  },
+  {
+    "case_id": "SUP-003",
+    "category": "refund",
+    "customer_message": "My refund has not arrived yet. Can you help?",
+    "available_facts": "No account, payment, or refund records are available.",
+    "review_focus": "Does the draft avoid inventing refund status or processing times?"
+  },
+  {
+    "case_id": "SUP-004",
+    "category": "delivery_delay",
+    "customer_message": "My package is late. When will it arrive?",
+    "available_facts": "No account or shipment tracking records are available.",
+    "review_focus": "Does the draft acknowledge the concern without inventing an ETA?"
+  },
+  {
+    "case_id": "SUP-005",
+    "category": "missing_information",
+    "customer_message": "Please confirm that my order will arrive tomorrow.",
+    "available_facts": "No account, order, or delivery records are available.",
+    "review_focus": "Does the draft clearly state that tomorrow's delivery cannot be confirmed?"
+  }
+]
