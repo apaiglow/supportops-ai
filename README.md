@@ -120,3 +120,59 @@ The script loads the processed training data, initializes the semantic retriever
 The report records generated drafts, retrieved examples, latency, and fields for manual quality review.
 
 The evaluation set is small and is intended for qualitative smoke testing, not as a statistically representative benchmark. Retrieval metrics alone do not establish that generated responses are factually correct.
+
+## Docker Deployment
+
+### Prerequisites
+
+- Docker Desktop with Docker Compose available.
+- Ollama installed and running on the host machine.
+- The configured model pulled into Ollama. The default is `qwen2.5:1.5b`.
+- Sufficient system memory for both the API's semantic retriever and local LLM inference.
+
+### Build and start
+
+From the repository root, build the image and start the API in the background:
+
+```bash
+docker compose up --build -d
+```
+
+Check the container status:
+
+```bash
+docker compose ps
+```
+
+Follow the API logs:
+
+```bash
+docker compose logs -f api
+```
+
+Stop the services:
+
+```bash
+docker compose down
+```
+
+The API is exposed at `http://localhost:8000`, with interactive documentation at `http://localhost:8000/docs`.
+
+### Ollama configuration
+
+The Docker Compose configuration sets:
+
+- `OLLAMA_BASE_URL`: `http://host.docker.internal:11434`
+- `SUPPORTOPS_LLM_MODEL`: `qwen2.5:1.5b`
+
+The `host.docker.internal` address allows the container to reach Ollama running on the host. The configured model must be available to that Ollama instance.
+
+For local development outside Docker, the default Ollama URL is `http://127.0.0.1:11434`.
+
+### Health checks and limitations
+
+`GET /health` checks whether the API and semantic retriever are ready. A successful health check does **not** guarantee that Ollama is reachable or that response generation will succeed.
+
+The application uses a 60-second response-generation timeout. On CPU-only systems, cold model loading and inference can be slow and may cause requests to time out. Check the API and Ollama logs when generation fails.
+
+Generated responses are drafts, not verified customer-service decisions. Review them for factual accuracy before using them with customers.
