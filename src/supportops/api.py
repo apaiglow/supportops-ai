@@ -140,6 +140,13 @@ def generate(request: GenerateRequest) -> dict[str, Any]:
             detail=str(exc),
         ) from exc
     except RuntimeError as exc:
+        elapsed = round(perf_counter() - started_at, 3)
+        logger.warning(
+            "Support draft generation failed: "
+            "failure_type=RuntimeError request_seconds=%.3f error=%s",
+            elapsed,
+            exc,
+        )
         message = str(exc).lower()
 
         if "timeout" in message or "did not respond within" in message:
@@ -154,13 +161,38 @@ def generate(request: GenerateRequest) -> dict[str, Any]:
             detail="The response-generation service is unavailable.",
         ) from exc
     except Exception:
-        logger.exception("Unexpected error during response generation.")
+        elapsed = round(perf_counter() - started_at, 3)
+        logger.exception(
+            "Unexpected error during response generation "
+            "(request_seconds=%.3f).",
+            elapsed,
+        )
         raise HTTPException(
             status_code=500,
             detail="An unexpected error occurred while generating the response.",
         ) from None
+
+    latency_seconds = round(perf_counter() - started_at, 3)
+    timings = result.get("timings")
+
+    if timings is not None:
+        logger.info(
+            "Support draft generated successfully: "
+            "retrieval_seconds=%.4f generation_seconds=%.4f "
+            "pipeline_seconds=%.4f request_seconds=%.3f",
+            timings["retrieval_seconds"],
+            timings["generation_seconds"],
+            timings["total_pipeline_seconds"],
+            latency_seconds,
+        )
+    else:
+        logger.info(
+            "Support draft generated successfully: request_seconds=%.3f",
+            latency_seconds,
+        )
+
     return {
         "draft": result["draft"],
         "retrieved_examples": result["retrieved_examples"],
-        "latency_seconds": round(perf_counter() - started_at, 3),
+        "latency_seconds": latency_seconds,
     }
