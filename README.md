@@ -1,178 +1,195 @@
 # SupportOps AI
 
-An intelligent customer-support platform combining NLP classification, semantic retrieval, local LLM response drafting, and production-style APIs.
+SupportOps AI is an AI-assisted customer-support drafting system. It combines
+text preprocessing, intent classification, semantic retrieval over historical
+support examples, and local LLM generation behind a FastAPI service.
 
-## Technology Direction
+The project focuses on measurable model evaluation, retrieval quality,
+API reliability, containerized deployment, and documenting operational
+limitations.
 
-- Python
+> **Status:** Portfolio/learning project, not a production-ready customer
+> support agent. Generated drafts require human review.
+
+## Architecture
+
+1. **Data preparation:** Validate and preprocess the support dataset and
+   create train/validation splits.
+2. **Intent classification:** Train and compare text classifiers, including
+   Logistic Regression and LinearSVC.
+3. **Retrieval:** Compare lexical and embedding-based semantic retrieval over
+   historical support examples.
+4. **Response drafting:** Retrieve relevant examples and combine them with
+   caller-provided facts in a prompt for a locally served LLM.
+5. **API:** Expose health and generation endpoints through FastAPI, with
+   request timing and error logging.
+6. **Deployment:** Package the API in Docker and use Docker Compose to connect
+   it to Ollama running on the host.
+
+## Technology
+
+- Python 3.12
 - pandas and scikit-learn
-- Text embeddings and semantic retrieval, if justified
-- A small local instruction LLM, subject to feasibility testing
-- FastAPI
-- A lightweight web interface
-- Automated testing and Docker, where feasible
+- Text embeddings and semantic retrieval
+- FastAPI and Pydantic
+- Ollama with `qwen2.5:1.5b` as the configured default model
+- pytest and Docker Compose
 
-## Repository Structure
+## Repository map
 
-```text
-supportops-ai/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── docs/
-├── scripts/
-├── README.md
-└── .gitignore
-```
+- `src/supportops/` — preprocessing, classification, retrieval, LLM
+  integration, RAG pipeline, and API.
+- `scripts/` — data preparation, model evaluation, retrieval evaluation,
+  and test scripts.
+- `data/` — dataset and evaluation inputs.
+- `reports/` — classification, retrieval, RAG, and observability results.
+- `docs/` — project documentation.
 
-The structure will evolve as implementation requirements become clear.
+## Evaluation results
 
-## Baseline vs. RAG Evaluation
+The following results are recorded from the project's validation and
+retrieval experiments:
 
-SupportOps AI compares direct LLM generation with retrieval-augmented generation (RAG) using semantic search over historical customer-support examples.
+| Experiment | Result |
+|---|---|
+| Intent classification | LinearSVC validation accuracy and macro-F1 were approximately 0.993 |
+| Semantic retrieval | Top-5 hit rate: 0.9985; MRR: 0.9938 |
+| Lexical retrieval | Top-5 hit rate: 0.9960; MRR: 0.9816 |
+| Automated tests | 23 passed in the final recorded test run |
 
-### Run the experiment
+These metrics measure different tasks. Classification scores do not measure
+response quality, and retrieval hit rate does not prove that a generated
+answer is correct or grounded.
 
-From the repository root, with the project virtual environment activated or available:
+### Baseline vs. RAG
 
-```bash
-PYTHONPATH=src .venv/bin/python scripts/evaluate_baseline_vs_rag.py
-```
+The exploratory evaluation recorded three successful baseline generations
+and three successful RAG generations:
 
-The default local model is `qwen2.5:1.5b`. Ensure Ollama is running and the model is available locally.
+| Mode | Mean latency | Median latency |
+|---|---:|---:|
+| Baseline | 11.759 s | 7.569 s |
+| RAG | 8.866 s | 8.819 s |
 
-### Summarize the results
+These are observations from only three synthetic scenarios per mode, not a
+statistically conclusive benchmark. Manual response-quality scoring remains
+incomplete, so these results do not establish that RAG improves answer quality.
 
-```bash
-PYTHONPATH=src .venv/bin/python scripts/summarize_rag_evaluation.py
-```
-
-### Outputs
-
-- `reports/rag_evaluation/baseline_vs_rag.csv` — generated drafts, configuration, latency, and errors.
-- `reports/rag_evaluation/retrieved_examples.csv` — historical examples returned for RAG requests.
-- `reports/rag_evaluation/manual_scores.csv` — human response-quality assessments.
-- `reports/rag_evaluation/evaluation_report.md` — generated experiment summary.
-
-### Evaluation caveats
-
-The experiment uses a small set of synthetic scenarios and is exploratory. Retrieval relevance does not guarantee factual correctness, and generated responses should be reviewed before being used with real customers. Results must be interpreted from the recorded outputs and completed manual assessments.
-
-## Running the API
-
-SupportOps AI exposes a FastAPI endpoint for generating customer-support response drafts using semantic retrieval and a local language model.
+## Run locally
 
 ### Prerequisites
 
-- Python 3.12 and the project's `.venv` environment
-- The processed training dataset at `data/processed/train.csv`
-- Ollama installed and running, with the configured model available locally
+- Python 3.12 and a project virtual environment
+- The project's dependencies installed from `requirements.txt`
+- The processed training data at `data/processed/train.csv`
+- Ollama running locally with the configured model available
 
 ### Start the API
 
 From the repository root:
 
 ```bash
-PYTHONPATH=src .venv/bin/python -m uvicorn supportops.api:app --host 127.0.0.1 --port 8000
+PYTHONPATH=src .venv/bin/python -m uvicorn supportops.api:app \
+  --host 127.0.0.1 --port 8000
 ```
 
-The application loads the training data and initializes the semantic retriever during startup.
+On startup, the API loads the training data and builds the semantic retriever.
+The first startup can take time while the embedding model is initialized.
 
-### Available endpoints
+### Endpoints
 
-- `GET /health` — basic health check.
-- `POST /generate` — generates a support-response draft using retrieved examples and supplied facts.
+- `GET /health` — reports API and retriever readiness.
+- `POST /generate` — retrieves examples and generates a support-response draft.
 - `GET /docs` — interactive API documentation.
 
-### Generate a draft
-
-Send a request to `POST /generate`:
+Example request:
 
 ```bash
 curl -X POST http://127.0.0.1:8000/generate \
   -H "Content-Type: application/json" \
   -d '{
     "customer_message": "Where is my order?",
+    "available_facts": "No verified order information is available.",
     "top_k": 3
   }'
 ```
 
-The response includes the generated draft, retrieved examples, and request latency.
+`top_k` accepts values from 1 to 5. Supply verified facts when available;
+the service cannot infer private account or order records that were not supplied.
 
-The `customer_message` field is required. `available_facts` can provide verified information for the model to use, and `top_k` controls the number of examples retrieved (1–5).
+### Run tests
 
-### Error handling
+```bash
+PYTHONPATH=src .venv/bin/python -m pytest -q scripts
+```
 
-The API uses HTTP status codes to distinguish invalid requests, unavailable services, generation timeouts, and pipeline errors. See `/docs` for the request and response schemas.
+### Run evaluation scripts
 
-### RAG Evaluation
+Baseline vs. RAG experiment:
 
-SupportOps AI includes a repeatable smoke-evaluation script for inspecting generated support drafts.
+```bash
+PYTHONPATH=src .venv/bin/python scripts/evaluate_baseline_vs_rag.py
+PYTHONPATH=src .venv/bin/python scripts/summarize_rag_evaluation.py
+```
 
-Run the evaluation from the project root:
+RAG smoke evaluation:
 
 ```bash
 PYTHONPATH=src .venv/bin/python scripts/evaluate_rag.py
 ```
 
-The script loads the processed training data, initializes the semantic retriever, runs the configured local language model on the fixed cases in `data/evaluation/support_cases.json`, and writes the results to `reports/rag_evaluation.csv`.
+Results are written under `reports/`. The evaluation inputs are small and
+exploratory; inspect generated outputs and complete the manual scoring sheet
+before making claims about response quality.
 
-The report records generated drafts, retrieved examples, latency, and fields for manual quality review.
+## Docker deployment
 
-The evaluation set is small and is intended for qualitative smoke testing, not as a statistically representative benchmark. Retrieval metrics alone do not establish that generated responses are factually correct.
+Prerequisites:
 
-## Docker Deployment
+- Docker Desktop with Docker Compose
+- Ollama running on the host
+- The configured model available to that Ollama instance
+- Enough memory for the embedding model and LLM inference
 
-### Prerequisites
-
-- Docker Desktop with Docker Compose available.
-- Ollama installed and running on the host machine.
-- The configured model pulled into Ollama. The default is `qwen2.5:1.5b`.
-- Sufficient system memory for both the API's semantic retriever and local LLM inference.
-
-### Build and start
-
-From the repository root, build the image and start the API in the background:
+Build and start the API:
 
 ```bash
 docker compose up --build -d
-```
-
-Check the container status:
-
-```bash
 docker compose ps
-```
-
-Follow the API logs:
-
-```bash
 docker compose logs -f api
 ```
 
-Stop the services:
+The API is exposed at `http://localhost:8000`; documentation is at
+`http://localhost:8000/docs`.
+
+The Compose configuration uses `host.docker.internal:11434` to reach Ollama
+on the host and configures `qwen2.5:1.5b` as the model. Stop the service with:
 
 ```bash
 docker compose down
 ```
 
-The API is exposed at `http://localhost:8000`, with interactive documentation at `http://localhost:8000/docs`.
+## Observability and known limitations
 
-### Ollama configuration
+- The API measures request duration and the RAG pipeline records retrieval,
+  generation, and total pipeline timings when returned by the pipeline.
+- The health endpoint is not a generation-latency benchmark. A healthy API
+  does not guarantee that Ollama is reachable or generation will succeed.
+- A recorded successful API generation took approximately 55.9 seconds of
+  API-reported latency (about 57.9 seconds total curl time) on the tested
+  CPU-based setup.
+- A generated draft was observed to contain unsupported template placeholders
+  and an incomplete final sentence.
+- The successful-generation timing log has not yet been verified after the
+  application logger configuration fix.
+- Manual response-quality scoring for the baseline-vs-RAG experiment is
+  incomplete.
+- Similarity scores and relevant retrieved examples do not guarantee factual
+  correctness. Generated responses must be reviewed by a human before use.
 
-The Docker Compose configuration sets:
+## Project scope
 
-- `OLLAMA_BASE_URL`: `http://host.docker.internal:11434`
-- `SUPPORTOPS_LLM_MODEL`: `qwen2.5:1.5b`
-
-The `host.docker.internal` address allows the container to reach Ollama running on the host. The configured model must be available to that Ollama instance.
-
-For local development outside Docker, the default Ollama URL is `http://127.0.0.1:11434`.
-
-### Health checks and limitations
-
-`GET /health` checks whether the API and semantic retriever are ready. A successful health check does **not** guarantee that Ollama is reachable or that response generation will succeed.
-
-The application uses a 60-second response-generation timeout. On CPU-only systems, cold model loading and inference can be slow and may cause requests to time out. Check the API and Ollama logs when generation fails.
-
-Generated responses are drafts, not verified customer-service decisions. Review them for factual accuracy before using them with customers.
+This project demonstrates an end-to-end ML/NLP workflow: dataset preparation,
+classifier comparison, retrieval evaluation, RAG integration, API development,
+testing, observability, and Docker packaging. It is a portfolio project and
+has not been validated for autonomous or production customer support.
