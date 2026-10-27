@@ -11,6 +11,7 @@ from supportops.rag import DEFAULT_FACTS, generate_support_draft
 from supportops.semantic_retrieval import build_semantic_retriever
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TRAINING_DATA_PATH = PROJECT_ROOT / "data" / "processed" / "train.csv"
